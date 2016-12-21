@@ -1,0 +1,23 @@
+{
+    "name": "gilsonsouza/lara-polices",
+    "description": "Laravel Request Polices",
+    "license": "MIT",
+    "require": {
+        "laravel/framework": "5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.5.*"
+    },
+    "authors": [
+        {
+            "name": "Gilson Fernandes Batista de Souza",
+            "email": "gilsonfernandesbatista@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "LaraPolices\\": "src/",
+          "LaraPolicesTests\\": "tests/polices/mock"
+        }
+    }
+}
