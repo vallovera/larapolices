@@ -8,13 +8,8 @@ class MockPolice extends AbstractPolice
 {
     public function mockTrueMethod($request)
     {
-        if (is_array($request->all())) {
-            return ('foo' === 'foo');
-        }
-    }
-
-    public function mockFalseMethod($request)
-    {
-        return ('foo' === 'bar');
+        return (bool) ($request->owner_id == $this->user->group['owner_id'] &&
+            $request->owner_type == $this->user->group['owner_type']
+        );
     }
 }

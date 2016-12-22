@@ -1,9 +1,10 @@
 <?php
 
-namespace LaraPolices\Middleware;
+namespace LaraPolices\Middlewares;
 
 use Closure;
 use ClassPreloader\Config;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class PolicesMiddleware
@@ -24,13 +25,14 @@ class PolicesMiddleware
 
             $actionPolice = $this->findActionPolice($controller, $action);
 
-            if ($actionPolice  !== null) {
+            if ($actionPolice !== null) {
                 $police = new $actionPolice(Auth::user());
-                if (!$police->authorize($request, $action)) {
+
+                if (!$police->canMakeAction($request, $action)) {
                     if ($request->ajax()) {
                         return response(Config::get('polices.defaultForbiddenMessage', 'Forbidden'), 403);
                     } else {
-                        return view(Config::get('polices.defaultForbiddenView', 'errors.403'));
+                        App::abort(Config::get('polices.defaultForbiddenMessage', 'Forbidden'), 403);
                     }
                 }
             }

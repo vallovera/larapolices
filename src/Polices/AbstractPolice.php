@@ -2,11 +2,12 @@
 
 namespace LaraPolices\Polices;
 
-use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use LaraPolices\Exceptions\ObjectNotFoundException;
 
-class AbstractPolice
+abstract class AbstractPolice
 {
     /**
      * Define the Autenticatable Interface
@@ -15,13 +16,54 @@ class AbstractPolice
     protected $user;
 
     /**
+     * @var array Objects storage
+     */
+    private $objects = array();
+
+    /**
      * AbstractPolice constructor.
      * @param Request $request
      * @param Authenticatable $user
      */
-    public function __construct(Authenticatable $user = null)
+    public function __construct(Authenticatable $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * Store object in police
+     *
+     * @param mixed $object
+     * @return $this
+     */
+    public function pushObject($object)
+    {
+        $objectReflection = new \ReflectionClass($object);
+        $this->objects[$objectReflection->getShortName()] = $object;
+
+        return $this;
+    }
+
+    /**
+     * Get object from police
+     *
+     * @param $name
+     * @return mixed
+     * @throws ObjectNotFoundException
+     */
+    public function getObject($name)
+    {
+        if (!isset($this->objects[$name])) {
+            if (class_exists($name)) {
+                $this->pushObject(App::make($name));
+
+                return $this->getObject($name);
+            }
+
+            throw new ObjectNotFoundException("Object not found.");
+        }
+
+        return $this->objects[$name];
     }
 
     /**
@@ -31,7 +73,7 @@ class AbstractPolice
      * @param string $actionToValidate Police action to validate
      * @return bool
      */
-    public function authorize(Request $request, $actionToValidate)
+    public function canMakeAction(Request $request, $actionToValidate)
     {
         return (bool) $this->$actionToValidate($request);
     }

@@ -7,11 +7,6 @@
  */
 return [
     /**
-    * Configure the default forbidden view to return in normal requests.
-    */
-    'defaultForbiddenView' => 'errors.403',
-
-    /**
     * Configure the default forbidden message to return in ajax requests.
     */
     'defaultForbiddenMessage' => 'Forbidden',
