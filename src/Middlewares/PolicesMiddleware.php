@@ -37,9 +37,8 @@ class PolicesMiddleware
                             ],
                             Response::HTTP_FORBIDDEN
                         );
-                    } else {
+                    } 
                         App::abort(403, Config::get('polices.defaultForbiddenMessage', 'Forbidden'));
-                    }
                 }
             }
         }
