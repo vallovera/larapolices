@@ -33,11 +33,11 @@ class PolicesServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__ . '../config/polices.php' => config_path('polices.php'),
+            dirname(__DIR__) . '/config/polices.php' => config_path('polices.php'),
         ]);
 
         $this->mergeConfigFrom(
-            __DIR__ . '../config/polices.php',
+            dirname(__DIR__) . '/config/polices.php',
             'polices'
         );
     }
